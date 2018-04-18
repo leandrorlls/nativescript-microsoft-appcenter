@@ -1,9 +1,9 @@
-# App Center plugin for NativeScript
+# Microsoft App Center plugin for NativeScript
 
 ## Installation
 
 ```javascript
-tns plugin add nativescript-app-center
+tns plugin add nativescript-microsoft-appcenter
 ```
 
 ## Analytics Features
