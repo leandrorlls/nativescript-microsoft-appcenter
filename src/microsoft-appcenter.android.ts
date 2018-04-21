@@ -1,65 +1,61 @@
-import { Common, IAppCenterConfiguration } from './microsoft-appcenter.common';
+import { IAppCenterConfig, HashMap } from './microsoft-appcenter.common';
 import * as app from "tns-core-modules/application";
 
 declare var com: any;
 
-export class AppCenter extends Common {
-    static appCenter: any = com.microsoft.appcenter.AppCenter;
+export class AppCenter {
+    appCenter: any = com.microsoft.appcenter.AppCenter;
+    analytics: any = com.microsoft.appcenter.analytics.Analytics;
 
-    public static init(config: IAppCenterConfiguration): void {
+    public start(config: IAppCenterConfig): void {
         let enabledServices: Array<any> = new Array<any>();
 
-        if (config.enableAnalytics) {
-            enabledServices.push(Analytics.getClass());
+        if (config.analytics) {
+            enabledServices.push(this.analytics.class);
         }
 
-        this.appCenter.start(app.android.context, config.applicationKey, enabledServices);
+        this.appCenter.start(app.android.context, config.appSecret, enabledServices);
     }
 
-    public static getInstallId(): string {
+    public getInstallId(): string {
         return this.appCenter.getInstallId().get();
     }
 
-    public static isEnabled(): boolean {
+    public isEnabled(): boolean {
         return this.appCenter.isEnabled().get();
     }
 
-    public static disable(): void {
+    public disable(): void {
         this.appCenter.setEnabled(false);
     }
 }
 
 export class Analytics {
-    static sdk: any = com.microsoft.appcenter.analytics.Analytics;
+    analytics: any = com.microsoft.appcenter.analytics.Analytics;
 
-    public static disable(): void {
-        this.sdk.setEnabled(false);
+    public disable(): void {
+        this.analytics.setEnabled(false);
     }
 
-    public static enable(): void {
-        this.sdk.setEnabled(true);
+    public enable(): void {
+        this.analytics.setEnabled(true);
     }
 
-    public static getClass(): any {
-        return this.sdk.class;
+    public getClass(): any {
+        return this.analytics.class;
     }
 
-    public static isEnabled(): boolean {
-        return this.sdk.isEnabled().get();
+    public isEnabled(): boolean {
+        return this.analytics.isEnabled().get();
     }
 
-    public static trackEvent(eventName: string, properties?: HashMap[]): void {
+    public trackEvent(eventName: string, properties?: HashMap[]): void {
         let hashMap = new java.util.HashMap<string, string>();
 
         if (properties && properties.length > 0) {
             properties.forEach(element => hashMap.put(element.key, element.value));
         }
 
-        this.sdk.trackEvent(eventName, hashMap);
+        this.analytics.trackEvent(eventName, hashMap);
     }
-}
-
-export interface HashMap {
-    key: string;
-    value: string;
 }

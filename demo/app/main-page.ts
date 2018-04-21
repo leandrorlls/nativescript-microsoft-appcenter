@@ -12,5 +12,6 @@ export function pageLoaded(args: observable.EventData) {
     let data: HashMap[] = new Array<HashMap>();
     data.push({ key: "AnyKey", value: "It works!" });
 
-    Analytics.trackEvent("MainPageLoaded", data);
+    let analytics = new Analytics();
+    analytics.trackEvent("MainPageLoaded", data);
 }

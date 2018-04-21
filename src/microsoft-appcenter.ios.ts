@@ -1,47 +1,77 @@
-import { Common, IAppCenterConfiguration } from './microsoft-appcenter.common';
+import { IAppCenterConfig, HashMap } from './microsoft-appcenter.common';
+import * as application from "tns-core-modules/application";
 
-export class AppCenter extends Common {
-    
-    public static init(config: IAppCenterConfiguration): void {
-        // Not implemented yet
+declare const MSAppCenter: any;
+declare const MSAnalytics: any;
+declare var UIResponder: any;
+declare var UIApplicationDelegate: any;
+
+export class AppCenter {    
+    public start(config: IAppCenterConfig): void {
+        let customAppDelegate = UIResponder.extend({
+            applicationDidFinishLaunchingWithOptions: function (application, launchOptions) {
+
+                const services = NSMutableArray.alloc().init();
+
+                if (config.analytics) {
+                    services.addObject(MSAnalytics);
+                }
+
+                MSAppCenter.startWithServices(config.appSecret, services);
+
+                return true;
+            }
+        }, {
+                name: "AppDelegate",
+                protocols: [UIApplicationDelegate],
+            }
+        );
+
+
+        application.ios.delegate = customAppDelegate;
     }
 
-    public static getInstallId(): string {
-        return "not implemented yet";
+    public getInstallId(): string {
+        return MSAppCenter.installId();
     }
 
-    public static isEnabled(): boolean {
-        return false;
+    public isEnabled(): boolean {
+        return MSAppCenter.isEnabled();
     }
 
-    public static disable(): void {
-        // Not implemented yet
+    public disable(): void {
+        MSAppCenter.setEnabled(false);
     }
 }
 
 export class Analytics {
-    public static disable(): void {
-        // Not implemented yet
+    public disable(): void {
+        MSAnalytics.setEnabled(false);
     }
 
-    public static enable(): void {
-        // Not implemented yet
+    public enable(): void {
+        MSAnalytics.setEnabled(true);
     }
 
-    public static getClass(): any {
-        return "not implemented yet";
+    public getClass(): any {
+        return MSAnalytics.self;
     }
 
-    public static isEnabled(): boolean {
-        return false;
+    public isEnabled(): boolean {
+        return MSAnalytics.isEnabled();
     }
 
-    public static trackEvent(eventName: string, properties?: HashMap[]): void {
-        // Not implemented yet
-    }
-}
+    public trackEvent(eventName: string, properties?: HashMap[]): void {
+        if (properties && properties.length > 0) {
+            let hashMap = NSMutableDictionary.alloc().init();
 
-export interface HashMap {
-    key: string;
-    value: string;
+            properties.forEach(property => {
+                hashMap.setValueForKey(property.value, property.key);
+            });
+
+            MSAnalytics.trackEventWithProperties(eventName, hashMap);
+        } else {
+            MSAnalytics.trackEvent(eventName);
+        }
+    }
 }

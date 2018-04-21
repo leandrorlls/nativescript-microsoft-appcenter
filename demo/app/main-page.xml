@@ -2,5 +2,11 @@
   xmlns:ui="nativescript-microsoft-appcenter">
   <StackLayout class="p-20">
     <Label text="{{ message }}" class="t-20 text-center c-black" textWrap="true"/>
+    <Label text="AppCenter InstallId" class="t-20 text-center c-black" textWrap="true"/>
+    <Label text="{{ appCenterInstallId }}" class="t-20 text-center c-black" textWrap="true"/>
+    <Label text="AppCenter Status" class="t-20 text-center c-black" textWrap="true"/>
+    <Label text="{{ appCenterIsEnabled }}" class="t-20 text-center c-black" textWrap="true"/>
+    <Label text="Analytics Status" class="t-20 text-center c-black" textWrap="true"/>
+    <Label text="{{ analyticsIsEnabled }}" class="t-20 text-center c-black" textWrap="true"/>
   </StackLayout>
 </Page>
