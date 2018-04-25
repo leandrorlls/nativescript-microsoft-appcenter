@@ -1,34 +1,28 @@
-import { IAppCenterConfig, HashMap } from './microsoft-appcenter.common';
+import { AppCenterSettings, TrackProperties } from './microsoft-appcenter.common';
 import * as application from "tns-core-modules/application";
 
 declare const MSAppCenter: any;
 declare const MSAnalytics: any;
-declare var UIResponder: any;
-declare var UIApplicationDelegate: any;
+declare const MSCrashes: any;
 
 export class AppCenter {    
-    public start(config: IAppCenterConfig): void {
-        let customAppDelegate = UIResponder.extend({
-            applicationDidFinishLaunchingWithOptions: function (application, launchOptions) {
+    public start(settings: AppCenterSettings): void {
+        const services = NSMutableArray.alloc().init();
 
-                const services = NSMutableArray.alloc().init();
+        if (settings.analytics) {
+            services.addObject(MSAnalytics);
+        }
 
-                if (config.analytics) {
-                    services.addObject(MSAnalytics);
-                }
+        if (settings.crashes) {
+            services.addObject(MSCrashes);
+        }
 
-                MSAppCenter.startWithServices(config.appSecret, services);
+        MSAppCenter.startWithServices(settings.appSecret, services);
+    }
 
-                return true;
-            }
-        }, {
-                name: "AppDelegate",
-                protocols: [UIApplicationDelegate],
-            }
-        );
-
-
-        application.ios.delegate = customAppDelegate;
+    public startWithAppDelegate(settings: AppCenterSettings): void {
+        AppCenterDelegate.setup(settings);
+        application.ios.delegate = AppCenterDelegate;
     }
 
     public getInstallId(): string {
@@ -44,7 +38,7 @@ export class AppCenter {
     }
 }
 
-export class Analytics {
+export class AppCenterAnalytics {
     public disable(): void {
         MSAnalytics.setEnabled(false);
     }
@@ -53,15 +47,11 @@ export class Analytics {
         MSAnalytics.setEnabled(true);
     }
 
-    public getClass(): any {
-        return MSAnalytics.self;
-    }
-
     public isEnabled(): boolean {
         return MSAnalytics.isEnabled();
     }
 
-    public trackEvent(eventName: string, properties?: HashMap[]): void {
+    public trackEvent(eventName: string, properties?: TrackProperties[]): void {
         if (properties && properties.length > 0) {
             let hashMap = NSMutableDictionary.alloc().init();
 
@@ -73,5 +63,52 @@ export class Analytics {
         } else {
             MSAnalytics.trackEvent(eventName);
         }
+    }
+}
+
+export class AppCenterCrashes {
+    
+    public disable(): void {
+        MSCrashes.setEnabled(false);
+    }
+
+    public enable(): void {
+        MSCrashes.setEnabled(true);
+    }
+
+    public isEnabled(): boolean {
+        return MSCrashes.isEnabled();
+    }
+
+    public hasCrashedInLastSession(): boolean {
+        return MSCrashes.hasCrashedInLastSession();
+    }
+
+    public generateTestCrash(): void {
+        MSCrashes.generateTestCrash();
+    }
+}
+
+export class AppCenterDelegate extends UIResponder implements UIApplicationDelegate {
+    private static settings: AppCenterSettings;
+    public static ObjCProtocols = [UIApplicationDelegate];
+        
+    public static setup(settings: AppCenterSettings): void {
+        this.settings = settings;
+    }
+
+    applicationDidFinishLaunchingWithOptions(application: UIApplication, launchOptions: NSDictionary<any, any>): boolean {
+        const services = NSMutableArray.alloc().init();
+
+        if (AppCenterDelegate.settings.analytics) {
+            services.addObject(MSAnalytics);
+        }
+
+        if (AppCenterDelegate.settings.crashes) {
+            services.addObject(MSCrashes);
+        }
+
+        MSAppCenter.startWithServices(AppCenterDelegate.settings.appSecret, services);
+        return true;
     }
 }

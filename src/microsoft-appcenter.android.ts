@@ -1,61 +1,82 @@
-import { IAppCenterConfig, HashMap } from './microsoft-appcenter.common';
+import { AppCenterSettings, TrackProperties } from './microsoft-appcenter.common';
 import * as app from "tns-core-modules/application";
 
 declare var com: any;
 
 export class AppCenter {
-    appCenter: any = com.microsoft.appcenter.AppCenter;
-    analytics: any = com.microsoft.appcenter.analytics.Analytics;
+    public start(settings: AppCenterSettings): void {
+        let services: Array<any> = new Array<any>();
 
-    public start(config: IAppCenterConfig): void {
-        let enabledServices: Array<any> = new Array<any>();
-
-        if (config.analytics) {
-            enabledServices.push(this.analytics.class);
+        if (settings.analytics) {
+            services.push(com.microsoft.appcenter.analytics.Analytics.class);
         }
 
-        this.appCenter.start(app.android.context, config.appSecret, enabledServices);
+        if (settings.crashes) {
+            services.push(com.microsoft.appcenter.crashes.Crashes.class);
+        }
+
+        com.microsoft.appcenter.AppCenter.start(app.android.context, settings.appSecret, services);        
+    }
+
+    public startWithAppDelegate(settings: AppCenterSettings): void {
+        this.start(settings);
     }
 
     public getInstallId(): string {
-        return this.appCenter.getInstallId().get();
+        return com.microsoft.appcenter.AppCenter.getInstallId().get();
     }
 
     public isEnabled(): boolean {
-        return this.appCenter.isEnabled().get();
+        return com.microsoft.appcenter.AppCenter.isEnabled().get();
     }
 
     public disable(): void {
-        this.appCenter.setEnabled(false);
+        com.microsoft.appcenter.AppCenter.setEnabled(false);
     }
 }
 
-export class Analytics {
-    analytics: any = com.microsoft.appcenter.analytics.Analytics;
-
+export class AppCenterAnalytics {
     public disable(): void {
-        this.analytics.setEnabled(false);
+        com.microsoft.appcenter.analytics.Analytics.setEnabled(false);
     }
 
     public enable(): void {
-        this.analytics.setEnabled(true);
-    }
-
-    public getClass(): any {
-        return this.analytics.class;
+        com.microsoft.appcenter.analytics.Analytics.setEnabled(true);
     }
 
     public isEnabled(): boolean {
-        return this.analytics.isEnabled().get();
+        return com.microsoft.appcenter.analytics.Analytics.isEnabled().get();
     }
 
-    public trackEvent(eventName: string, properties?: HashMap[]): void {
+    public trackEvent(eventName: string, properties?: TrackProperties[]): void {
         let hashMap = new java.util.HashMap<string, string>();
 
         if (properties && properties.length > 0) {
             properties.forEach(element => hashMap.put(element.key, element.value));
         }
 
-        this.analytics.trackEvent(eventName, hashMap);
+        com.microsoft.appcenter.analytics.Analytics.trackEvent(eventName, hashMap);
+    }
+}
+
+export class AppCenterCrashes {
+    public disable(): void {
+        com.microsoft.appcenter.crashes.Crashes.setEnabled(false);
+    }
+
+    public enable(): void {
+        com.microsoft.appcenter.crashes.Crashes.setEnabled(true);
+    }
+
+    public isEnabled(): boolean {
+        return com.microsoft.appcenter.crashes.Crashes.isEnabled().get();
+    }
+
+    public hasCrashedInLastSession(): boolean {
+        return com.microsoft.appcenter.crashes.Crashes.hasCrashedInLastSession().get();
+    }
+
+    public generateTestCrash(): void {
+        com.microsoft.appcenter.crashes.Crashes.generateTestCrash();
     }
 }

@@ -1,15 +1,32 @@
 ﻿import "./bundle-config";
-import * as application from 'tns-core-modules/application';
-import { AppCenter, Analytics } from 'nativescript-microsoft-appcenter';
+import * as application from "tns-core-modules/application";
+import { AppCenter, AppCenterSettings } from 'nativescript-microsoft-appcenter';
 
-let appCenterConfig = {
+let appCenterConfig: AppCenterSettings = {
     appSecret: "<YOUR-APP-KEY-HERE>",
-    analytics: true
+    analytics: true,
+    crashes: true
 };
+
+/*
+ANDROID
+    -> appCenter.start() should be used
+    -> appCenter.startWithAppDelegate() will call appCenter.start()
+
+IOS
+    -> appCenter.startWithAppDelegate() will create a custom AppDelegate class and start the App Center
+    -> appCenter.start() should be used only if you want to use your own custom AppDelegate
+    Example:
+    
+*/
 
 // AppCenter Start
 let appCenter = new AppCenter();
-appCenter.start(appCenterConfig);
+if (application.android) {
+    setTimeout(() => { appCenter.start(appCenterConfig); }, 300);
+} else {
+    appCenter.startWithAppDelegate(appCenterConfig);
+}
 
 // Start
 application.start({ moduleName: "main-page" });
