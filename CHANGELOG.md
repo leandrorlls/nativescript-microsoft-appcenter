@@ -1,6 +1,21 @@
 nativescript-microsoft-appcenter
 ==============================
 
+# 1.2.0 (2018, April 27)
+
+- New release 1.2.0
+
+## New
+
+- Added new method `startWithAppDelegate` in the class `AppCenter` to be used to start the App Center on iOS
+- Added new class `AppCenterCrashes` for iOS / Android
+- Added a new angular project `demo-ng`
+
+## Updates
+- The interface `IAppCenterConfig` was renamed to `AppCenterSettings`
+- The class `HashMap` was renamed to `TrackProperties`
+- The class `Analytics` was renamed to `AppCenterAnalytics`
+
 # 1.1.0 (2018, April 21)
 
 - New release 1.1.0

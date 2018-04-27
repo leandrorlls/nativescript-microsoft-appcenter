@@ -51,7 +51,7 @@ tns plugin add nativescript-microsoft-appcenter
 
 | Feature | Android | iOS |
 | --- | --- | --- |
-| Diagnostics | NOT YET | NOT YET |
+| Crashes | YES | YES |
 
 ## Push Features
     
