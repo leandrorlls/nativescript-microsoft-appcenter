@@ -12,7 +12,7 @@ if (application.ios){
     }
 
     let appCenter = new AppCenter();
-    appCenter.start(appCenterSettings);
+    appCenter.startWithAppDelegate(appCenterSettings);
 }
 
 platformNativeScriptDynamic().bootstrapModule(AppModule);
