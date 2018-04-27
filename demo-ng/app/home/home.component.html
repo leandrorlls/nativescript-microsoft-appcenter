@@ -1,0 +1,16 @@
+<ActionBar class="action-bar">
+    <Label class="action-bar-title" text="Home"></Label>
+</ActionBar>
+
+<StackLayout class="page">
+    <Label row="0" text="Angular Demo" class="t-20 text-center c-black" textWrap="true"></Label>
+    <Label row="1" text="AppCenter InstallId" class="t-20 text-center c-black" textWrap="true"></Label>
+    <Label row="2" [text]="appCenterInstallId" class="t-20 text-center c-black" textWrap="true"></Label>
+    <Label row="3" text="AppCenter Status" class="t-20 text-center c-black" textWrap="true"></Label>
+    <Label row="4" [text]="appCenterIsEnabled" class="t-20 text-center c-black" textWrap="true"></Label>
+    <Label row="5" text="Analytics Status" class="t-20 text-center c-black" textWrap="true"></Label>
+    <Label row="6" [text]="analyticsIsEnabled" class="t-20 text-center c-black" textWrap="true"></Label>
+    <Label row="7" text="Crashes Status" class="t-20 text-center c-black" textWrap="true"></Label>
+    <Label row="8" [text]="crashesIsEnabled" class="t-20 text-center c-black" textWrap="true"></Label>
+    <Button row="9" text="Crashes Test" (tap)="crashesTap()"></Button>
+</StackLayout>
