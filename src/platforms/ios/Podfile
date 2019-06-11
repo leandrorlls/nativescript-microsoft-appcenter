@@ -1,1 +1,2 @@
 pod 'AppCenter'
+pod 'AppCenter/Distribute'

@@ -4,6 +4,7 @@ export interface AppCenterSettings {
     appSecret?: string;
     analytics?: boolean;
     crashes?: boolean;
+    distribute?: boolean;
 }
 export interface TrackProperties {
     key: string;
@@ -28,4 +29,9 @@ export declare class AppCenterCrashes {
     isEnabled(): boolean;
     hasCrashedInLastSession(): boolean;
     generateTestCrash(): void;
+}
+export declare class AppCenterDistribute {
+    disable(): void;
+    enable(): void;
+    isEnabled(): boolean;
 }

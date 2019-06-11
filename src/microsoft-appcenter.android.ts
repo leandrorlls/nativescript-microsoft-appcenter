@@ -15,6 +15,10 @@ export class AppCenter {
             services.push(com.microsoft.appcenter.crashes.Crashes.class);
         }
 
+        if (settings.distribute) {
+            services.push(com.microsoft.appcenter.distribute.Distribute.class);
+        }
+
         com.microsoft.appcenter.AppCenter.start(app.android.context, settings.appSecret, services);        
     }
 
@@ -78,5 +82,19 @@ export class AppCenterCrashes {
 
     public generateTestCrash(): void {
         com.microsoft.appcenter.crashes.Crashes.generateTestCrash();
+    }
+}
+
+export class AppCenterDistribute {
+    public disable(): void {
+        com.microsoft.appcenter.distribute.Distribute.setEnabled(false);
+    }
+
+    public enable(): void {
+        com.microsoft.appcenter.distribute.Distribute.setEnabled(true);
+    }
+
+    public isEnabled(): boolean {
+        return com.microsoft.appcenter.distribute.Distribute.isEnabled().get();
     }
 }

@@ -4,7 +4,7 @@ import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 
-import { AppCenter, AppCenterAnalytics, AppCenterCrashes } from "nativescript-microsoft-appcenter";
+import {AppCenter, AppCenterAnalytics, AppCenterCrashes, AppCenterDistribute} from "nativescript-microsoft-appcenter";
 
 @NgModule({
     bootstrap: [
@@ -23,7 +23,8 @@ import { AppCenter, AppCenterAnalytics, AppCenterCrashes } from "nativescript-mi
     providers: [
         AppCenter, 
         AppCenterAnalytics, 
-        AppCenterCrashes
+        AppCenterCrashes,
+        AppCenterDistribute
     ]
 })
 export class AppModule { }
