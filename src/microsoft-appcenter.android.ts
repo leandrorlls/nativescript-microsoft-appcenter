@@ -1,5 +1,4 @@
 import { AppCenterSettings, TrackProperties } from './microsoft-appcenter.common';
-import * as app from "tns-core-modules/application";
 
 declare var com: any;
 
@@ -19,7 +18,7 @@ export class AppCenter {
             services.push(com.microsoft.appcenter.distribute.Distribute.class);
         }
 
-        com.microsoft.appcenter.AppCenter.start(app.android.context, settings.appSecret, services);        
+        com.microsoft.appcenter.AppCenter.start(com.tns.NativeScriptApplication.getInstance(), settings.appSecret, services);
     }
 
     public startWithAppDelegate(settings: AppCenterSettings): void {
