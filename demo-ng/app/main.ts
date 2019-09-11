@@ -8,7 +8,8 @@ if (application.ios){
     let appCenterSettings: AppCenterSettings = {
         appSecret: "<YOUR-APP-KEY-HERE>",
         analytics: true,
-        crashes: true
+        crashes: true,
+        distribute: true,
     }
 
     let appCenter = new AppCenter();

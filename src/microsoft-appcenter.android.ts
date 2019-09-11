@@ -1,5 +1,4 @@
 import { AppCenterSettings, TrackProperties } from './microsoft-appcenter.common';
-import * as app from "tns-core-modules/application";
 
 declare var com: any;
 
@@ -15,7 +14,11 @@ export class AppCenter {
             services.push(com.microsoft.appcenter.crashes.Crashes.class);
         }
 
-        com.microsoft.appcenter.AppCenter.start(app.android.context, settings.appSecret, services);        
+        if (settings.distribute) {
+            services.push(com.microsoft.appcenter.distribute.Distribute.class);
+        }
+
+        com.microsoft.appcenter.AppCenter.start(com.tns.NativeScriptApplication.getInstance(), settings.appSecret, services);
     }
 
     public startWithAppDelegate(settings: AppCenterSettings): void {
@@ -78,5 +81,19 @@ export class AppCenterCrashes {
 
     public generateTestCrash(): void {
         com.microsoft.appcenter.crashes.Crashes.generateTestCrash();
+    }
+}
+
+export class AppCenterDistribute {
+    public disable(): void {
+        com.microsoft.appcenter.distribute.Distribute.setEnabled(false);
+    }
+
+    public enable(): void {
+        com.microsoft.appcenter.distribute.Distribute.setEnabled(true);
+    }
+
+    public isEnabled(): boolean {
+        return com.microsoft.appcenter.distribute.Distribute.isEnabled().get();
     }
 }

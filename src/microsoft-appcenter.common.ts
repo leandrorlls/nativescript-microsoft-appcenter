@@ -5,6 +5,7 @@ export interface AppCenterSettings {
   appSecret?: string;
   analytics?: boolean;
   crashes?: boolean;
+  distribute?: boolean;
 }
 
 export interface TrackProperties {

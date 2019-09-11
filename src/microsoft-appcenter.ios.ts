@@ -4,6 +4,7 @@ import * as application from "tns-core-modules/application";
 declare const MSAppCenter: any;
 declare const MSAnalytics: any;
 declare const MSCrashes: any;
+declare const MSDistribute: any;
 
 export class AppCenter {    
     public start(settings: AppCenterSettings): void {
@@ -15,6 +16,10 @@ export class AppCenter {
 
         if (settings.crashes) {
             services.addObject(MSCrashes);
+        }
+
+        if (settings.distribute) {
+            services.addObject(MSDistribute);
         }
 
         MSAppCenter.startWithServices(settings.appSecret, services);
@@ -89,6 +94,21 @@ export class AppCenterCrashes {
     }
 }
 
+export class AppCenterDistribute {
+
+    public disable(): void {
+        MSDistribute.setEnabled(false);
+    }
+
+    public enable(): void {
+        MSDistribute.setEnabled(true);
+    }
+
+    public isEnabled(): boolean {
+        return MSDistribute.isEnabled();
+    }
+}
+
 export class AppCenterDelegate extends UIResponder implements UIApplicationDelegate {
     private static settings: AppCenterSettings;
     public static ObjCProtocols = [UIApplicationDelegate];
@@ -106,6 +126,10 @@ export class AppCenterDelegate extends UIResponder implements UIApplicationDeleg
 
         if (AppCenterDelegate.settings.crashes) {
             services.addObject(MSCrashes);
+        }
+
+        if (AppCenterDelegate.settings.distribute) {
+            services.addObject(MSDistribute);
         }
 
         MSAppCenter.startWithServices(AppCenterDelegate.settings.appSecret, services);

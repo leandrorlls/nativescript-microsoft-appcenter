@@ -10,6 +10,8 @@
     <Label text="{{ analyticsIsEnabled }}" class="t-20 text-center c-black" textWrap="true"/>
     <Label text="Crashes Status" class="t-20 text-center c-black" textWrap="true"/>
     <Label text="{{ crashesIsEnabled }}" class="t-20 text-center c-black" textWrap="true"/>
+    <Label text="Distribute Status" class="t-20 text-center c-black" textWrap="true"/>
+    <Label text="{{ distributeIsEnabled }}" class="t-20 text-center c-black" textWrap="true"/>
     <Button text="Crashes Test" tap="crashesTap"></Button>
   </StackLayout>
 </Page>
