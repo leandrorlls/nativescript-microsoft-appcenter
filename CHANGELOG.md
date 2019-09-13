@@ -1,12 +1,25 @@
 nativescript-microsoft-appcenter
 ==============================
 
+# 2.0.0 (2019, September 13)
+
+- New release 2.0.0
+
+## New
+- Added support for `Distribute`
+
+## Updates
+- The `NativeScript` version of the plugin was updated to `5.4.0`
+- The demos using `TypeScript` and `Angular` were updated
+
+### Fixed
+- Android context issue: Application context may not be null
+
 # 1.2.0 (2018, April 27)
 
 - New release 1.2.0
 
 ## New
-
 - Added new method `startWithAppDelegate` in the class `AppCenter` to be used to start the App Center on iOS
 - Added new class `AppCenterCrashes` for iOS / Android
 - Added a new angular project `demo-ng`
@@ -21,7 +34,6 @@ nativescript-microsoft-appcenter
 - New release 1.1.0
 
 ## New
-
 - Included `analytics` for iOS
 
 ## Updates
@@ -35,7 +47,6 @@ nativescript-microsoft-appcenter
 - New release 1.0.0
 
 ## New
-
 - Included `analytics` for Android
 
 ## 1.0.2 (2018, April 19)

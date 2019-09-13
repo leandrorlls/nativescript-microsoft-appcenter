@@ -39,26 +39,28 @@ is a framework for building native iOS and Android apps using JavaScript and CSS
 tns plugin add nativescript-microsoft-appcenter
 ```
 
-## Analytics Features
-    
+### Distribute Features
+| Android | iOS |
+| --- | --- |
+| YES | YES |
+
+### Diagnostics Features
+| Feature | Android | iOS |
+| --- | --- | --- |
+| Crashes | YES | YES |
+
+### Analytics Features
 | Feature | Android | iOS |
 | --- | --- | --- |
 | **Overview:** Active users, daily sessions per user, session duration, top devices, countries, languages and active users per version. | YES | YES |
 | **Events:** Event name, Count, Trend, Users, User Change and Per User. | YES | YES |
 | **Log flow** | YES | YES |
 
-## Diagnostics Features
-
+### Push Features
 | Feature | Android | iOS |
 | --- | --- | --- |
-| Crashes | YES | YES |
-
-## Push Features
-    
-| Feature | Android | iOS |
-| --- | --- | --- |
-| Notifications | NOT YET | NOT YET |
-| Audiences | NOT YET | NOT YET |
+| Notifications | COMING SOON | COMING SOON |
+| Audiences | COMING SOON | COMING SOON |
     
 ## License
 
