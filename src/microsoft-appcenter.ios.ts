@@ -1,28 +1,23 @@
 import { AppCenterSettings, TrackProperties } from './microsoft-appcenter.common';
 import { Application } from "@nativescript/core";
 
-declare const MSAppCenter: any;
-declare const MSAnalytics: any;
-declare const MSCrashes: any;
-declare const MSDistribute: any;
-
 export class AppCenter {    
     public start(settings: AppCenterSettings): void {
-        const services = NSMutableArray.alloc().init();
+        const services = []
 
         if (settings.analytics) {
-            services.addObject(MSAnalytics);
+            services.push(MSACAnalytics);
         }
 
         if (settings.crashes) {
-            services.addObject(MSCrashes);
+            services.push(MSACCrashes);
         }
 
         if (settings.distribute) {
-            services.addObject(MSDistribute);
+            services.push(MSACDistribute);
         }
 
-        MSAppCenter.startWithServices(settings.appSecret, services);
+        MSACAppCenter.startWithServices(settings.appSecret, NSArray.arrayWithArray(services));
     }
 
     public startWithAppDelegate(settings: AppCenterSettings): void {
@@ -31,42 +26,46 @@ export class AppCenter {
     }
 
     public getInstallId(): string {
-        return MSAppCenter.installId();
+        return MSACAppCenter.installId.UUIDString;
     }
 
     public isEnabled(): boolean {
-        return MSAppCenter.isEnabled();
+        return MSACAppCenter.enabled;
+    }
+
+    public enable(): void {
+        MSACAppCenter.enabled = true;
     }
 
     public disable(): void {
-        MSAppCenter.setEnabled(false);
+        MSACAppCenter.enabled = false;
     }
 }
 
 export class AppCenterAnalytics {
     public disable(): void {
-        MSAnalytics.setEnabled(false);
+        MSACAnalytics.enabled = false;
     }
 
     public enable(): void {
-        MSAnalytics.setEnabled(true);
+        MSACAnalytics.enabled = true;
     }
 
     public isEnabled(): boolean {
-        return MSAnalytics.isEnabled();
+        return MSACAnalytics.enabled;
     }
 
     public trackEvent(eventName: string, properties?: TrackProperties[]): void {
         if (properties && properties.length > 0) {
-            let hashMap = NSMutableDictionary.alloc().init();
+            const hashMap: any = {}
 
             properties.forEach(property => {
-                hashMap.setValueForKey(property.value, property.key);
+                hashMap[property.key] = property.value;
             });
 
-            MSAnalytics.trackEventWithProperties(eventName, hashMap);
+            MSACAnalytics.trackEventWithProperties(eventName, NSDictionary.dictionaryWithDictionary(hashMap));
         } else {
-            MSAnalytics.trackEvent(eventName);
+            MSACAnalytics.trackEvent(eventName);
         }
     }
 }
@@ -74,42 +73,43 @@ export class AppCenterAnalytics {
 export class AppCenterCrashes {
     
     public disable(): void {
-        MSCrashes.setEnabled(false);
+        MSACCrashes.enabled = false;
     }
 
     public enable(): void {
-        MSCrashes.setEnabled(true);
+        MSACCrashes.enabled = true;
     }
 
     public isEnabled(): boolean {
-        return MSCrashes.isEnabled();
+        return MSACCrashes.enabled;
     }
 
     public hasCrashedInLastSession(): boolean {
-        return MSCrashes.hasCrashedInLastSession();
+        return MSACCrashes.hasCrashedInLastSession;
     }
 
     public generateTestCrash(): void {
-        MSCrashes.generateTestCrash();
+        MSACCrashes.generateTestCrash();
     }
 }
 
 export class AppCenterDistribute {
 
     public disable(): void {
-        MSDistribute.setEnabled(false);
+        MSACDistribute.enabled = false;
     }
 
     public enable(): void {
-        MSDistribute.setEnabled(true);
+        MSACDistribute.enabled = true;
     }
 
     public isEnabled(): boolean {
-        return MSDistribute.isEnabled();
+        return MSACDistribute.enabled;
     }
 }
 
-export class AppCenterDelegate extends UIResponder implements UIApplicationDelegate {
+@NativeClass()
+class AppCenterDelegate extends UIResponder implements UIApplicationDelegate {
     private static settings: AppCenterSettings;
     public static ObjCProtocols = [UIApplicationDelegate];
         
@@ -118,21 +118,23 @@ export class AppCenterDelegate extends UIResponder implements UIApplicationDeleg
     }
 
     applicationDidFinishLaunchingWithOptions(application: UIApplication, launchOptions: NSDictionary<any, any>): boolean {
-        const services = NSMutableArray.alloc().init();
+        const services = []
 
         if (AppCenterDelegate.settings.analytics) {
-            services.addObject(MSAnalytics);
+            services.push(MSACAnalytics);
         }
 
         if (AppCenterDelegate.settings.crashes) {
-            services.addObject(MSCrashes);
+            services.push(MSACCrashes);
         }
 
         if (AppCenterDelegate.settings.distribute) {
-            services.addObject(MSDistribute);
+            services.push(MSACDistribute);
         }
 
-        MSAppCenter.startWithServices(AppCenterDelegate.settings.appSecret, services);
+        MSACAppCenter.startWithServices(AppCenterDelegate.settings.appSecret, NSArray.arrayWithArray(services));
         return true;
     }
 }
+
+export { AppCenterDelegate };

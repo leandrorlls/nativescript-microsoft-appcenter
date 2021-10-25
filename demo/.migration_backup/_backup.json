@@ -1,0 +1,14 @@
+{
+	"name": "migration",
+	"paths": [
+		"package.json",
+		"package-lock.json",
+		"karma.conf.js",
+		"nsconfig.json",
+		"app/package.json",
+		"package.json",
+		"karma.conf.js",
+		"nsconfig.json",
+		"app/package.json"
+	]
+}

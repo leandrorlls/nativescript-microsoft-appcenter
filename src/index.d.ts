@@ -14,6 +14,7 @@ export declare class AppCenter {
     getInstallId(): string;
     isEnabled(): boolean;
     disable(): void;
+    enable(): void;
 }
 export declare class AppCenterAnalytics {
     disable(): void;

@@ -1,4 +1,4 @@
-import { Observable } from 'tns-core-modules/data/observable';
+import { Observable } from '@nativescript/core';
 import { AppCenter, AppCenterSettings, AppCenterAnalytics, AppCenterCrashes, AppCenterDistribute } from 'nativescript-microsoft-appcenter';
 
 export class HelloWorldModel extends Observable {
