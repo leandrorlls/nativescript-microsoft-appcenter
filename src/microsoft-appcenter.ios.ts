@@ -1,5 +1,5 @@
 import { AppCenterSettings, TrackProperties } from './microsoft-appcenter.common';
-import * as application from "tns-core-modules/application";
+import { Application } from "@nativescript/core";
 
 declare const MSAppCenter: any;
 declare const MSAnalytics: any;
@@ -27,7 +27,7 @@ export class AppCenter {
 
     public startWithAppDelegate(settings: AppCenterSettings): void {
         AppCenterDelegate.setup(settings);
-        application.ios.delegate = AppCenterDelegate;
+        Application.ios.delegate = AppCenterDelegate;
     }
 
     public getInstallId(): string {
