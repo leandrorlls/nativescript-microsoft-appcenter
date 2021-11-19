@@ -1,5 +1,4 @@
-<Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded" class="page"
-  xmlns:ui="nativescript-microsoft-appcenter">
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded" class="page">
   <StackLayout class="p-20">
     <Label text="TypeScript Demo" class="t-20 text-center c-black" textWrap="true"/>
     <Label text="AppCenter InstallId" class="t-20 text-center c-black" textWrap="true"/>
@@ -12,6 +11,7 @@
     <Label text="{{ crashesIsEnabled }}" class="t-20 text-center c-black" textWrap="true"/>
     <Label text="Distribute Status" class="t-20 text-center c-black" textWrap="true"/>
     <Label text="{{ distributeIsEnabled }}" class="t-20 text-center c-black" textWrap="true"/>
-    <Button text="Crashes Test" tap="crashesTap"></Button>
+    <Button text="Check Status" tap="{{ check }}"></Button>
+    <Button text="Crashes Test" tap="{{ crashesTap }}"></Button>
   </StackLayout>
 </Page>

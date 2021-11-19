@@ -28,4 +28,4 @@ if (isAndroid) {
 }
 
 // Start
-Application.run({ moduleName: "main-page" });
+Application.run({ moduleName: "app-root" });
