@@ -1,7 +1,5 @@
 import { AppCenterSettings, TrackProperties } from './microsoft-appcenter.common';
 
-declare var com: any;
-
 export class AppCenter {
     public start(settings: AppCenterSettings): void {
         let services: Array<any> = new Array<any>();
@@ -18,7 +16,7 @@ export class AppCenter {
             services.push(com.microsoft.appcenter.distribute.Distribute.class);
         }
 
-        com.microsoft.appcenter.AppCenter.start(com.tns.NativeScriptApplication.getInstance(), settings.appSecret, services);
+        com.microsoft.appcenter.AppCenter.start((<any>com).tns.NativeScriptApplication.getInstance(), settings.appSecret, services);
     }
 
     public startWithAppDelegate(settings: AppCenterSettings): void {
@@ -26,11 +24,11 @@ export class AppCenter {
     }
 
     public getInstallId(): string {
-        return com.microsoft.appcenter.AppCenter.getInstallId().get();
+        return com.microsoft.appcenter.AppCenter.getInstallId().get().toString();
     }
 
     public isEnabled(): boolean {
-        return com.microsoft.appcenter.AppCenter.isEnabled().get();
+        return com.microsoft.appcenter.AppCenter.isEnabled().get().booleanValue();
     }
 
     public disable(): void {
@@ -48,7 +46,7 @@ export class AppCenterAnalytics {
     }
 
     public isEnabled(): boolean {
-        return com.microsoft.appcenter.analytics.Analytics.isEnabled().get();
+        return com.microsoft.appcenter.analytics.Analytics.isEnabled().get().booleanValue();
     }
 
     public trackEvent(eventName: string, properties?: TrackProperties[]): void {
@@ -72,11 +70,11 @@ export class AppCenterCrashes {
     }
 
     public isEnabled(): boolean {
-        return com.microsoft.appcenter.crashes.Crashes.isEnabled().get();
+        return com.microsoft.appcenter.crashes.Crashes.isEnabled().get().booleanValue();
     }
 
     public hasCrashedInLastSession(): boolean {
-        return com.microsoft.appcenter.crashes.Crashes.hasCrashedInLastSession().get();
+        return com.microsoft.appcenter.crashes.Crashes.hasCrashedInLastSession().get().booleanValue();
     }
 
     public generateTestCrash(): void {
@@ -94,6 +92,6 @@ export class AppCenterDistribute {
     }
 
     public isEnabled(): boolean {
-        return com.microsoft.appcenter.distribute.Distribute.isEnabled().get();
+        return com.microsoft.appcenter.distribute.Distribute.isEnabled().get().booleanValue();
     }
 }

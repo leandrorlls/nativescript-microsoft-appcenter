@@ -4,3 +4,4 @@
 /// <reference path="./typings/objc!AppCenterAnalytics.d.ts" />
 /// <reference path="./typings/objc!AppCenterCrashes.d.ts" />
 /// <reference path="./typings/objc!AppCenterDistribute.d.ts" />
+/// <reference path="./typings/appcenter.d.ts" />
