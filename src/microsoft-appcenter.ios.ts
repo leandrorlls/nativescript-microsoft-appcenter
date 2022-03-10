@@ -1,6 +1,34 @@
 import { AppCenterSettings, TrackProperties } from './microsoft-appcenter.common';
 import { Application } from "@nativescript/core";
 
+export const appDelegate = getAppDelegate();
+
+function enableMultipleOverridesFor(classRef, methodName, nextImplementation) {
+    const currentImplementation = classRef.prototype[methodName];
+    classRef.prototype[methodName] = function () {
+        const result = currentImplementation && currentImplementation.apply(currentImplementation, Array.from(arguments));
+        return nextImplementation.apply(nextImplementation, Array.from(arguments).concat([result]));
+    };
+}
+
+function getAppDelegate() {
+    // Play nice with other plugins by not completely ignoring anything already added to the appdelegate
+    if (Application.ios.delegate === undefined) {
+        @NativeClass
+        class UIApplicationDelegateImpl extends UIResponder implements UIApplicationDelegate {
+            public static ObjCProtocols = [UIApplicationDelegate];
+
+            static new(): UIApplicationDelegateImpl {
+                return super.new();
+            }
+        }
+
+        Application.ios.delegate = UIApplicationDelegateImpl;
+    }
+
+    return Application.ios.delegate;
+}
+
 export class AppCenter {    
     public start(settings: AppCenterSettings): void {
         const services = []
@@ -21,8 +49,30 @@ export class AppCenter {
     }
 
     public startWithAppDelegate(settings: AppCenterSettings): void {
-        AppCenterDelegate.setup(settings);
-        Application.ios.delegate = AppCenterDelegate;
+        enableMultipleOverridesFor(
+            appDelegate,
+            'applicationDidFinishLaunchingWithOptions',
+            function (
+                application: UIApplication,
+                launchOptions: NSDictionary<any, any>
+            ): boolean {
+                const services = []
+
+                if (settings.analytics) {
+                    services.push(MSACAnalytics);
+                }
+
+                if (settings.crashes) {
+                    services.push(MSACCrashes);
+                }
+
+                if (settings.distribute) {
+                    services.push(MSACDistribute);
+                }
+
+                MSACAppCenter.startWithServices(settings.appSecret, NSArray.arrayWithArray(services));
+                return true;
+            });
     }
 
     public getInstallId(): string {
@@ -107,34 +157,3 @@ export class AppCenterDistribute {
         return MSACDistribute.enabled;
     }
 }
-
-@NativeClass()
-class AppCenterDelegate extends UIResponder implements UIApplicationDelegate {
-    private static settings: AppCenterSettings;
-    public static ObjCProtocols = [UIApplicationDelegate];
-        
-    public static setup(settings: AppCenterSettings): void {
-        this.settings = settings;
-    }
-
-    applicationDidFinishLaunchingWithOptions(application: UIApplication, launchOptions: NSDictionary<any, any>): boolean {
-        const services = []
-
-        if (AppCenterDelegate.settings.analytics) {
-            services.push(MSACAnalytics);
-        }
-
-        if (AppCenterDelegate.settings.crashes) {
-            services.push(MSACCrashes);
-        }
-
-        if (AppCenterDelegate.settings.distribute) {
-            services.push(MSACDistribute);
-        }
-
-        MSACAppCenter.startWithServices(AppCenterDelegate.settings.appSecret, NSArray.arrayWithArray(services));
-        return true;
-    }
-}
-
-export { AppCenterDelegate };
