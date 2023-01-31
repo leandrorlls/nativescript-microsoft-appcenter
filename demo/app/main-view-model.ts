@@ -1,5 +1,12 @@
-import { Observable } from 'tns-core-modules/data/observable';
-import { AppCenter, AppCenterSettings, AppCenterAnalytics, AppCenterCrashes, AppCenterDistribute } from 'nativescript-microsoft-appcenter';
+import { EventData, Observable } from "@nativescript/core";
+import {
+  AppCenter,
+  AppCenterSettings,
+  AppCenterAnalytics,
+  AppCenterCrashes,
+  AppCenterDistribute,
+  TrackProperties,
+} from "nativescript-microsoft-appcenter";
 
 export class HelloWorldModel extends Observable {
   public appCenterInstallId: string;
@@ -16,13 +23,38 @@ export class HelloWorldModel extends Observable {
   constructor() {
     super();
 
-    this.appCenterInstallId = this.appCenter.getInstallId();
-    this.appCenterIsEnabled = this.appCenter.isEnabled() ? "Enabled" : "Disabled";
+    let data: TrackProperties[] = new Array<TrackProperties>();
+    data.push({ key: "AnyKey", value: "It works!" });
 
-    this.analyticsIsEnabled = this.analytics.isEnabled() ? "Enabled" : "Disabled";
+    let analytics = new AppCenterAnalytics();
+    analytics.trackEvent("MainPageLoaded", data);
+  }
+
+  check() {
+    this.set("appCenterInstallId", this.appCenter.getInstallId());
+
+    this.set(
+      "appCenterIsEnabled",
+      this.appCenter.isEnabled() ? "Enabled" : "Disabled"
+    );
+
+    this.set(
+      "analyticsIsEnabled",
+      this.analytics.isEnabled() ? "Enabled" : "Disabled"
+    );
     this.analytics.trackEvent("main-view-model starts");
 
-    this.crashesIsEnabled = this.crashes.isEnabled() ? "Enabled" : "Disabled";
-    this.distributeIsEnabled = this.distribute.isEnabled() ? "Enabled" : "Disabled";
+    this.set(
+      "crashesIsEnabled",
+      this.crashes.isEnabled() ? "Enabled" : "Disabled"
+    );
+    this.set(
+      "distributeIsEnabled",
+      this.distribute.isEnabled() ? "Enabled" : "Disabled"
+    );
+  }
+
+  crashesTap(args: EventData) {
+    this.crashes.generateTestCrash();
   }
 }

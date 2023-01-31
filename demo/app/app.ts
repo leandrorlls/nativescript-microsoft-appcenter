@@ -1,5 +1,4 @@
-﻿import "./bundle-config";
-import * as application from "tns-core-modules/application";
+﻿import { Application, isAndroid } from '@nativescript/core';
 import { AppCenter, AppCenterSettings } from 'nativescript-microsoft-appcenter';
 
 let appCenterConfig: AppCenterSettings = {
@@ -22,11 +21,11 @@ IOS
 
 // AppCenter Start
 let appCenter = new AppCenter();
-if (application.android) {
+if (isAndroid) {
     setTimeout(() => { appCenter.start(appCenterConfig); }, 300);
 } else {
     appCenter.startWithAppDelegate(appCenterConfig);
 }
 
 // Start
-application.start({ moduleName: "main-page" });
+Application.run({ moduleName: "app-root" });

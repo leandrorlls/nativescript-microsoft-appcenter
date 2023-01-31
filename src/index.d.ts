@@ -1,5 +1,3 @@
-import { Observable } from "tns-core-modules/data/observable";
-
 export interface AppCenterSettings {
     appSecret?: string;
     analytics?: boolean;
@@ -16,6 +14,7 @@ export declare class AppCenter {
     getInstallId(): string;
     isEnabled(): boolean;
     disable(): void;
+    enable(): void;
 }
 export declare class AppCenterAnalytics {
     disable(): void;
